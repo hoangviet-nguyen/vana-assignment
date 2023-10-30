@@ -1,1 +1,1 @@
-"#vana-assignment" 
+#vana-assignment
