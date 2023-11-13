@@ -9,7 +9,7 @@ from PIL import Image
 
 data_path = "./data"
 
-#defining the data and splitting them 
+#Loading the data and splitting them into test and train data
 mnist_trainset = datasets.MNIST(
     root=data_path, 
     train=True, 
@@ -24,29 +24,34 @@ mnist_testset = datasets.MNIST(
     transform=transform.ToTensor()
 )
 
-#loading the data
-(x_Image, y_trainInput) = mnist_trainset._load_data()
-x_Image, y_testInput = mnist_testset._load_data()
+(x_train, y_train) = mnist_trainset[0]
+(x_test, y_test) = mnist_testset[0]
 
 labels = []
 histogram = []
 
+#Initializes the arrays
 for i in range(10):
     labels.append(i)
 
 for i in range(10):
     histogram.append(i)
 
+#Caluclates the spread of the data
+for i in range(len(mnist_trainset)):
+    img, label = mnist_trainset[i]
+    histogram[label] += 1
+
 
 #Desribes the data we are working with
 def data_format():
-    print("The size of the training dataset is: " + len(mnist_trainset))
-    print("The size of the test set is: " + len(mnist_trainset))
-    print("The size of one image is: " + len(x_Image) * len(x_Image))
-    print("The Input container is: " + type(mnist_trainset[0]))
-    print("The data types of the input are: " + type(y_trainInput[0]) + " and " + type(x_Image[0]))
+    print("The size of the training dataset is: " + str(len(mnist_trainset)))
+    print("The size of the test set is: " + str(len(mnist_testset)))
+    print("The size of one image is: " + str(len(x_train[0][0])* len(x_train[0][1])))
+    print("The Input container is: " + str(type(mnist_trainset[0])))
+    print("The data types of the input are: " + str(type(y_train)) + " and " + str(type(x_train)))
 
-
+#Visualizes some sample data with their labels
 def visualizeData():
     figure = plt.figure(figsize=(16, 16))
     cols, rows = 3, 3
@@ -59,11 +64,8 @@ def visualizeData():
         plt.imshow(img.squeeze(), cmap="gray")
     plt.show()
 
+
 def createHistorgramm():
-    for i in range(len(mnist_trainset)):
-        img, label = mnist_trainset[i]
-        histogram[label] += 1
-    
     plt.bar(labels, histogram, edgecolor='black')
     plt.xlabel("Label")
     plt.ylabel("Number of images")
@@ -71,5 +73,3 @@ def createHistorgramm():
     plt.show()
 
 if __name__ == "__main__":
-    createHistorgramm()
-    visualizeData()
