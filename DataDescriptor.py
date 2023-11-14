@@ -1,3 +1,4 @@
+#%%
 import torch
 import numpy as np
 import torchvision.datasets as datasets
@@ -9,6 +10,8 @@ class DataDescriptor:
     data_path = "./data"
 
     #Loading the data and splitting them into test and train data
+    global mnist_trainset, mnist_testset, x_train, y_train, x_test, y_test, labels, histogram
+
     mnist_trainset = datasets.MNIST(
         root=data_path, 
         train=True, 
@@ -41,8 +44,9 @@ class DataDescriptor:
         img, label = mnist_trainset[i]
         histogram[label] += 1
 
-
-    #Desribes the data we are working with
+    
+    
+    #%% Desribes the data we are working with
     def data_format():
         print("The size of the training dataset is: " + str(len(mnist_trainset)))
         print("The size of the test set is: " + str(len(mnist_testset)))
@@ -50,7 +54,9 @@ class DataDescriptor:
         print("The Input container is: " + str(type(mnist_trainset[0])))
         print("The data types of the input are: " + str(type(y_train)) + " and " + str(type(x_train)))
 
-    #Visualizes some sample data with their labels
+
+    
+    #%% Visualizes some sample data with their labels
     def visualizeData():
         figure = plt.figure(figsize=(16, 16))
         cols, rows = 3, 3
@@ -63,7 +69,7 @@ class DataDescriptor:
             plt.imshow(img.squeeze(), cmap="gray")
         plt.show()
 
-
+    #%% Visualize the spread of the data
     def createHistorgramm():
         plt.bar(labels, histogram, edgecolor='black')
         plt.xlabel("Label")
