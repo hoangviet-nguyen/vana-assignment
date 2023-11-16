@@ -1,16 +1,11 @@
 from random import randint
-import torch
 import numpy as np
 import torchvision.datasets as datasets
 import torchvision.transforms as transform
-import matplotlib.pyplot as plt
 
 class DataLoader:
 
     data_path = "./data"
-
-    #Loading the data and splitting them into test and train data
-    global mnist_trainset, mnist_testset, x_train, y_train, x_test, y_test, labels, histogram
 
     mnist_trainset = datasets.MNIST(
         root=data_path, 
@@ -25,25 +20,6 @@ class DataLoader:
         download=True, 
         transform=transform.ToTensor()
     )
-
-    (x_train, y_train) = mnist_trainset[0]
-    (x_test, y_test) = mnist_testset[0]
-
-    labels = []
-    histogram = []
-
-    #Initializes the arrays
-    for i in range(10):
-        labels.append(i)
-
-    for i in range(10):
-        histogram.append(i)
-
-    #Caluclates the spread of the data
-    for i in range(len(mnist_trainset)):
-        img, label = mnist_trainset[i]
-        histogram[label] += 1
-
     
     #scales the input according to the given formula
     def normalization(self, data: np.ndarray):
@@ -55,28 +31,25 @@ class DataLoader:
 
     
     def getSampleData(self):
-        random = randint(0, len(mnist_trainset))
-        data = mnist_trainset.data[random].float().numpy()
-        print(data.ndim)
+        random = randint(0, len(self.mnist_trainset))
+        data = self.mnist_trainset.data[0].float().numpy()
         data = self.normalization(data)
-        return data
+        return data.flatten()
 
     def getNormalizedTrainData(self):
         normalize_data = []
-        for i in range (len(mnist_trainset.data)):
-            data = mnist_trainset.data[i].float().numpy()
+        for i in range (len(self.mnist_trainset.data)):
+            data = self.mnist_trainset.data[i].float().numpy()
             data = self.normalization(data)
             normalize_data.append(data)
         
         return normalize_data
         
-
-    
     
     def getNormalizedTestData(self):
         normalize_data = []
-        for i in range (len(mnist_trainset.data)):
-            data = mnist_testset.data[i].float().numpy()
+        for i in range (len(self.mnist_trainset.data)):
+            data = self.mnist_testset.data[i].float().numpy()
             data = self.normalization(data)
             normalize_data.append(data)
         
